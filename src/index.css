@@ -2,39 +2,87 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Grevya Enterprise Architectural Design System */
+/* Grevya Unified Theme Architecture Tokens */
 
 @layer base {
-  :root {
-    --background: 222 35% 8%;
-    --foreground: 210 40% 98%;
+  /* Default / Dark Theme Scope */
+  :root,
+  [data-theme="dark"],
+  html.dark {
+    --theme-bg: #0a0a0a;
+    --theme-surface: #131313;
+    --theme-surface-elevated: #1a1a1a;
+    --theme-text: #fafafa;
+    --theme-text-secondary: #a1a1a1;
+    --theme-text-tertiary: #6b6b6b;
+    --theme-border: rgba(255, 255, 255, 0.10);
+    --theme-border-strong: rgba(255, 255, 255, 0.20);
+    --theme-accent: #f97316;
+    --theme-accent-soft: rgba(249, 115, 22, 0.15);
+    --theme-input: #1a1a1a;
+    --theme-nav-bg: rgba(10, 10, 10, 0.80);
+    --theme-nav-border: rgba(255, 255, 255, 0.10);
 
-    --card: 222 30% 11%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222 35% 9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 221 83% 53%;
+    /* Legacy compatibility bindings */
+    --background: 0 0% 4%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 7.5%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 7.5%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 24 95% 53%;
     --primary-foreground: 0 0% 100%;
-
-    --secondary: 217 24% 17%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217 20% 14%;
-    --muted-foreground: 215 16% 65%;
-
-    --accent: 221 83% 53%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 63%;
+    --accent: 24 95% 53%;
     --accent-foreground: 0 0% 100%;
+    --destructive: 359 100% 70%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 100% / 0.10;
+    --input: 0 0% 100% / 0.15;
+    --ring: 24 95% 53%;
+    --radius: 0.875rem;
 
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --font-display: 'Syne', sans-serif;
+    --font-body: 'Inter', sans-serif;
+  }
 
-    --border: 217 20% 16%;
-    --input: 217 20% 16%;
-    --ring: 221 83% 53%;
+  /* Light Theme Scope for Product & Internal Pages */
+  [data-theme="light"],
+  html.light {
+    --theme-bg: #fafafa;
+    --theme-surface: #ffffff;
+    --theme-surface-elevated: #f4f4f5;
+    --theme-text: #17191c;
+    --theme-text-secondary: #52525b;
+    --theme-text-tertiary: #71717a;
+    --theme-border: rgba(0, 0, 0, 0.08);
+    --theme-border-strong: rgba(0, 0, 0, 0.16);
+    --theme-accent: #f97316;
+    --theme-accent-soft: rgba(249, 115, 22, 0.10);
+    --theme-input: #ffffff;
+    --theme-nav-bg: rgba(255, 255, 255, 0.85);
+    --theme-nav-border: rgba(0, 0, 0, 0.08);
 
-    --radius: 0.75rem;
+    --background: 0 0% 98%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 24 95% 53%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 24 95% 53%;
+    --accent-foreground: 0 0% 100%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 24 95% 53%;
   }
 }
 
@@ -45,112 +93,66 @@
 
   html {
     scroll-behavior: smooth;
-    color-scheme: dark;
+    background-color: var(--theme-bg);
   }
 
   body {
-    @apply bg-[#0D1017] text-slate-100 antialiased selection:bg-blue-600/30 selection:text-blue-100;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--theme-bg);
+    color: var(--theme-text);
+    @apply antialiased selection:bg-[#f97316]/30 selection:text-white;
+    font-family: var(--font-body);
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    letter-spacing: -0.025em;
   }
 }
 
 @layer utilities {
-  /* Architectural Rhythm Sections */
-  .section-dark-obsidian {
-    background-color: #0B0D10;
-    color: #FAFAF8;
+  /* Signature Brand Accent Gradient Text Utility */
+  .text-gradient-accent {
+    background: linear-gradient(90deg, #fb923c 0%, #f97316 50%, #ef4444 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
-  .section-graphite {
-    background-color: #111418;
-    color: #FAFAF8;
+  .bg-accent-gradient {
+    background: linear-gradient(90deg, #fb923c 0%, #f97316 50%, #ef4444 100%);
   }
 
-  .section-charcoal {
-    background-color: #171A1F;
-    color: #FAFAF8;
+  /* Micro-Label & Wayfinding Eyebrow Class */
+  .micro-label {
+    font-family: var(--font-body);
+    font-size: 0.75rem; /* 12px */
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--theme-text-secondary);
   }
 
-  .section-light-editorial {
-    background-color: #F5F4F0;
-    color: #17191C;
+  /* Dark Luxury Glass & Card Tokens */
+  .card-dark {
+    background-color: var(--theme-surface);
+    border: 1px solid var(--theme-border);
+    border-radius: 14px;
   }
 
-  /* 3-LEVEL FROSTED ARCHITECTURAL GLASS SYSTEM */
-
-  /* Level 1: Subtle Glass */
-  .glass-subtle {
-    background: rgba(255, 255, 255, 0.04);
-    backdrop-filter: blur(14px) saturate(120%);
-    -webkit-backdrop-filter: blur(14px) saturate(120%);
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
+  .card-dark-nested {
+    background-color: var(--theme-surface-elevated);
+    border: 1px solid var(--theme-border);
+    border-radius: 14px;
   }
 
-  /* Level 2: Real Frosted Glass (Navbar & Interactive Cards) */
-  .glass-frosted-nav {
-    background: rgba(20, 23, 28, 0.68);
-    backdrop-filter: blur(28px) saturate(135%);
-    -webkit-backdrop-filter: blur(28px) saturate(135%);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.14), 0 20px 45px -15px rgba(0, 0, 0, 0.55);
+  /* Radii Enforcements */
+  .rounded-pill {
+    border-radius: 9999px;
   }
 
-  /* Level 3: Hero & Premium Product Glass */
-  .glass-premium-hero {
-    background: rgba(17, 20, 24, 0.78);
-    backdrop-filter: blur(34px) saturate(140%);
-    -webkit-backdrop-filter: blur(34px) saturate(140%);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.16), 0 25px 50px -16px rgba(0, 0, 0, 0.65);
-  }
-
-  /* Light Theme Frosted Glass */
-  .glass-light-architectural {
-    background: rgba(255, 255, 255, 0.78);
-    backdrop-filter: blur(20px) saturate(120%);
-    -webkit-backdrop-filter: blur(20px) saturate(120%);
-    border: 1px solid rgba(23, 25, 28, 0.08);
-    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.8), 0 14px 36px -12px rgba(23, 25, 28, 0.06);
-  }
-
-  /* Micro-Interactions */
-  .interaction-lift {
-    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
-  }
-  .interaction-lift:hover {
-    transform: translateY(-2px) scale(1.008);
-    box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.4);
-  }
-  .interaction-lift:active {
-    transform: scale(0.985);
-  }
-
-  /* Glass Pointer Sheen Highlight */
-  .glass-sheen {
-    position: relative;
-    overflow: hidden;
-  }
-  .glass-sheen::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 60%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(255, 255, 255, 0.04) 50%,
-      transparent 100%
-    );
-    pointer-events: none;
-    transition: left 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .glass-sheen:hover::after {
-    left: 140%;
+  .rounded-soft-card {
+    border-radius: 14px;
   }
 
   /* Architectural Grid Overlays */
@@ -161,10 +163,44 @@
     background-size: 64px 64px;
   }
 
-  .bg-arch-grid-light {
-    background-image: 
-      linear-gradient(to right, rgba(23, 25, 28, 0.03) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(23, 25, 28, 0.03) 1px, transparent 1px);
-    background-size: 64px 64px;
+  /* Interactive Hover Glow */
+  .shadow-accent-glow {
+    box-shadow: 0 8px 24px rgba(249, 115, 34, 0.25);
   }
+
+  .hover-glow {
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .hover-glow:hover {
+    box-shadow: 0 8px 24px rgba(249, 115, 34, 0.25);
+    transform: translateY(-1px);
+  }
+}
+
+/* Infinite Marquee Animation Keyframes */
+@keyframes marquee-scroll {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-scroll-reverse {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0%); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 35s linear infinite;
+}
+
+.animate-marquee-reverse {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll-reverse 35s linear infinite;
+}
+
+.animate-marquee:hover,
+.animate-marquee-reverse:hover {
+  animation-play-state: paused;
 }

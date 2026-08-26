@@ -42,7 +42,7 @@ const CareersPage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#0a0a0a] text-[#fafafa]">
       <Navigation />
       <main id="main-content">
         <Careers />
@@ -53,4 +53,3 @@ const CareersPage = () => {
 };
 
 export default CareersPage;
-

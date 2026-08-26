@@ -1,15 +1,18 @@
-
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import React, { useState } from "react";
+import { Mail, Phone, Clock, Send, Loader2, ShieldCheck, MapPin, Calendar, ArrowRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Mail, Calendar, Phone, Clock, Send, Loader2, ShieldCheck } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import emailjs from '@emailjs/browser';
-import { motion } from "framer-motion";
+import Eyebrow from "@/components/primitives/Eyebrow";
+import GradientText from "@/components/primitives/GradientText";
+import GhostNumeral from "@/components/primitives/GhostNumeral";
+import ReusableCard from "@/components/primitives/ReusableCard";
+import Pill from "@/components/primitives/Pill";
+import RevealOnScroll from "@/components/motion/RevealOnScroll";
 
-const Contact = () => {
+export const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -82,207 +85,223 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-24 sm:py-32 section-dark-obsidian relative overflow-hidden border-t border-white/10">
-      {/* Background Architectural Grid */}
-      <div className="absolute inset-0 bg-arch-grid opacity-40 pointer-events-none"></div>
+    <section id="contact" className="py-24 sm:py-32 bg-[#0a0a0a] text-[#fafafa] relative overflow-hidden border-t border-white/10">
+      {/* Background Atmosphere Grid */}
+      <div className="absolute inset-0 bg-arch-grid opacity-30 pointer-events-none" />
+      <div className="absolute bottom-0 left-1/3 w-[550px] h-[550px] bg-[#f97316]/5 rounded-full blur-[160px] pointer-events-none" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
+      <div className="relative max-w-[1536px] mx-auto px-6 sm:px-10 lg:px-16 z-10 w-full space-y-16">
         
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-3xl mb-16"
-        >
-          <div className="inline-flex items-center gap-2 text-xs font-mono font-semibold uppercase tracking-wider text-[#02A4EF] mb-4">
-            <span className="w-1.5 h-1.5 bg-[#02A4EF] rounded-full"></span>
-            <span>Initiate Collaboration</span>
+        {/* Wayfinding Header */}
+        <RevealOnScroll delay={0.1} direction="up">
+          <div className="max-w-3xl space-y-4">
+            <Eyebrow index="006" label="INITIATE TECHNICAL CONSULTATION & PILOT SCOPE" />
+            <h2 className="font-display text-4xl sm:text-6xl lg:text-6xl font-extrabold uppercase text-[#fafafa] tracking-tight leading-[0.95]">
+              LET'S BUILD YOUR <br />
+              <GradientText className="inline">AI ARCHITECTURE</GradientText>
+            </h2>
+            <p className="font-sans text-[#a1a1a1] text-base sm:text-xl font-normal leading-relaxed max-w-2xl">
+              Schedule a technical consultation or submit your project scope to connect directly with Grevya software architects.
+            </p>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-[1.15] mb-6">
-            Architect Your AI Infrastructure With Us
-          </h2>
-          <p className="text-[#697078] text-lg leading-relaxed font-normal">
-            Schedule a technical consultation or submit your project scope to connect directly with Grevya software architects.
-          </p>
-        </motion.div>
+        </RevealOnScroll>
 
-        <div className="grid lg:grid-cols-12 gap-10 lg:gap-12">
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-12 items-start">
           
-          {/* Left Form Panel */}
-          <motion.div
-            initial={{ opacity: 0, x: -16 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:col-span-7 glass-dark-architectural rounded-2xl p-8 sm:p-10 border border-white/10 bg-[#111418]/90 shadow-2xl space-y-6"
-          >
-            <div className="flex items-center gap-3 pb-4 border-b border-white/10">
-              <div className="p-3 rounded-xl bg-[#02A4EF]/10 border border-[#02A4EF]/20 text-[#02A4EF]">
-                <Mail className="h-6 w-6" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-white">Send Us a Direct Message</h3>
-                <p className="text-xs text-slate-400 font-mono">Direct Engineering Inquiry</p>
-              </div>
-            </div>
+          {/* Form Column */}
+          <RevealOnScroll delay={0.2} direction="up" className="lg:col-span-7">
+            <ReusableCard
+              variant="elevated"
+              className="p-8 sm:p-10 border-white/10 bg-[#131313]/90 shadow-2xl space-y-8 relative overflow-hidden"
+            >
+              <GhostNumeral
+                numeral="06"
+                className="absolute -right-4 -top-8 text-white/[0.04] pointer-events-none"
+              />
 
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="name" className="text-xs font-mono font-semibold text-slate-300 mb-2 block">Full Name</Label>
-                  <Input
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    className="bg-white/5 border-white/10 text-white rounded-xl h-12 text-sm focus:border-[#02A4EF]"
-                    placeholder="John Doe"
-                  />
+              <div className="flex items-center gap-3.5 pb-6 border-b border-white/10 relative z-10">
+                <div className="p-3 rounded-xl bg-[#f97316]/10 border border-[#f97316]/20 text-[#f97316]">
+                  <Mail className="h-6 w-6" />
                 </div>
                 <div>
-                  <Label htmlFor="email" className="text-xs font-mono font-semibold text-slate-300 mb-2 block">Work Email</Label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    className="bg-white/5 border-white/10 text-white rounded-xl h-12 text-sm focus:border-[#02A4EF]"
-                    placeholder="john@company.com"
-                  />
+                  <h3 className="text-xl font-display font-bold uppercase text-white tracking-wide">
+                    Direct Technical Inquiry
+                  </h3>
+                  <p className="text-xs font-mono text-[#a1a1a1]">
+                    Submit your project parameters for review
+                  </p>
                 </div>
               </div>
 
-              <div>
-                <Label htmlFor="company" className="text-xs font-mono font-semibold text-slate-300 mb-2 block">Company / Organization</Label>
-                <Input
-                  id="company"
-                  name="company"
-                  value={formData.company}
-                  onChange={handleChange}
-                  className="bg-white/5 border-white/10 text-white rounded-xl h-12 text-sm focus:border-[#02A4EF]"
-                  placeholder="Company Name"
-                />
-              </div>
+              <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
+                <div className="grid sm:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="name" className="text-xs font-mono font-bold uppercase tracking-[0.15em] text-[#a1a1a1] block">
+                      Full Name *
+                    </Label>
+                    <Input
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                      className="bg-[#1a1a1a] border-white/10 text-white rounded-xl h-12 text-sm focus:border-[#f97316] focus:ring-1 focus:ring-[#f97316]"
+                      placeholder="John Doe"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email" className="text-xs font-mono font-bold uppercase tracking-[0.15em] text-[#a1a1a1] block">
+                      Work Email *
+                    </Label>
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      className="bg-[#1a1a1a] border-white/10 text-white rounded-xl h-12 text-sm focus:border-[#f97316] focus:ring-1 focus:ring-[#f97316]"
+                      placeholder="john@company.com"
+                    />
+                  </div>
+                </div>
 
-              <div>
-                <Label htmlFor="message" className="text-xs font-mono font-semibold text-slate-300 mb-2 block">Project Details & Scope</Label>
-                <Textarea
-                  id="message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  rows={5}
-                  required
-                  className="bg-white/5 border-white/10 text-white rounded-xl text-sm focus:border-[#02A4EF] resize-none p-4"
-                  placeholder="Describe your AI software project, pilot scope, or timeline..."
-                />
-              </div>
+                <div className="space-y-2">
+                  <Label htmlFor="company" className="text-xs font-mono font-bold uppercase tracking-[0.15em] text-[#a1a1a1] block">
+                    Company / Organization
+                  </Label>
+                  <Input
+                    id="company"
+                    name="company"
+                    value={formData.company}
+                    onChange={handleChange}
+                    className="bg-[#1a1a1a] border-white/10 text-white rounded-xl h-12 text-sm focus:border-[#f97316] focus:ring-1 focus:ring-[#f97316]"
+                    placeholder="Enterprise Name"
+                  />
+                </div>
 
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-[#02A4EF] hover:bg-[#0284C7] text-white font-bold text-xs uppercase tracking-wide py-6 rounded-xl shadow-lg transition-all interaction-lift"
-              >
-                <span className="flex items-center justify-center gap-2">
+                <div className="space-y-2">
+                  <Label htmlFor="message" className="text-xs font-mono font-bold uppercase tracking-[0.15em] text-[#a1a1a1] block">
+                    Project Details & Technical Scope *
+                  </Label>
+                  <Textarea
+                    id="message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    rows={5}
+                    required
+                    className="bg-[#1a1a1a] border-white/10 text-white rounded-xl text-sm focus:border-[#f97316] focus:ring-1 focus:ring-[#f97316] resize-none p-4"
+                    placeholder="Describe your AI software requirements, data sources, vector DB preferences, or deployment timelines..."
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full inline-flex items-center justify-center gap-2 py-4 rounded-full bg-[#f97316] hover:bg-[#ea580c] text-white text-xs font-sans font-bold uppercase tracking-[0.2em] shadow-lg transition-all duration-200 disabled:opacity-50"
+                >
                   {isSubmitting ? (
                     <>
                       <Loader2 className="h-4 w-4 animate-spin" />
-                      Submitting...
+                      <span>Submitting Inquiry...</span>
                     </>
                   ) : (
                     <>
                       <Send className="h-4 w-4" />
-                      Submit Technical Scope
+                      <span>Submit Technical Scope</span>
                     </>
                   )}
-                </span>
-              </Button>
-            </form>
-          </motion.div>
+                </button>
+              </form>
+            </ReusableCard>
+          </RevealOnScroll>
 
-          {/* Right Direct Info & Consultation */}
-          <motion.div
-            initial={{ opacity: 0, x: 16 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:col-span-5 space-y-6"
-          >
+          {/* Right Direct Communication & Callout */}
+          <RevealOnScroll delay={0.3} direction="up" className="lg:col-span-5 space-y-6">
             
             {/* Consultation Card */}
-            <div className="glass-dark-architectural rounded-2xl p-8 border border-white/10 bg-[#111418] shadow-2xl space-y-6">
+            <ReusableCard
+              variant="elevated"
+              className="p-8 border-white/10 bg-[#131313]/90 shadow-2xl space-y-6"
+            >
               <div className="flex items-center gap-3">
-                <div className="p-3 rounded-xl bg-[#02A4EF]/10 border border-[#02A4EF]/20 text-[#02A4EF]">
+                <div className="p-3 rounded-xl bg-[#f97316]/10 border border-[#f97316]/20 text-[#f97316]">
                   <Calendar className="h-6 w-6" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white">Book Architecture Consultation</h3>
-                  <p className="text-xs font-mono text-slate-400">Engineering Feasibility Audit</p>
+                  <h3 className="text-lg font-display font-bold uppercase text-white tracking-wide">
+                    Schedule Architecture Call
+                  </h3>
+                  <p className="text-xs font-mono text-[#a1a1a1]">
+                    1-on-1 Feasibility Review
+                  </p>
                 </div>
               </div>
 
-              <p className="text-slate-300 text-xs leading-relaxed">
-                Discuss system feasibility, model selection, vector database requirements, and pilot deployment timelines directly with software architects.
+              <p className="font-sans text-[#a1a1a1] text-xs leading-relaxed">
+                Discuss system feasibility, model selection, vector database requirements, and pilot deployment timelines directly with Grevya software architects.
               </p>
 
-              <Button
+              <button
                 onClick={() => {
                   const subject = encodeURIComponent("Technical Consultation Request");
                   const body = encodeURIComponent("Hi Grevya engineering team,\n\nI would like to schedule a technical consultation call.\n\nThanks!");
                   window.location.href = `mailto:info@grevya.com?subject=${subject}&body=${body}`;
                 }}
-                className="w-full bg-white/10 hover:bg-white/20 text-white border border-white/15 font-bold text-xs uppercase tracking-wide py-5 rounded-xl interaction-lift"
+                className="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-full bg-[#1a1a1a] hover:bg-[#222] border border-white/15 text-xs font-sans font-bold uppercase tracking-[0.15em] text-white hover:text-[#f97316] transition-colors"
               >
-                Schedule Consultation Call
-              </Button>
+                <span>Schedule Consultation Call</span>
+                <ArrowRight className="h-4 w-4" />
+              </button>
 
-              <div className="space-y-2 pt-2 text-xs text-slate-300 font-mono">
+              <div className="space-y-2.5 pt-2 border-t border-white/10 text-xs font-mono text-slate-300">
                 <div className="flex items-center gap-2">
-                  <ShieldCheck className="h-4 w-4 text-[#02A4EF]" />
+                  <ShieldCheck className="h-4 w-4 text-[#f97316]" />
                   <span>Strict Data Privacy Principles</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <ShieldCheck className="h-4 w-4 text-[#02A4EF]" />
-                  <span>Direct Technical Review</span>
+                  <ShieldCheck className="h-4 w-4 text-[#f97316]" />
+                  <span>Direct Engineering Review</span>
                 </div>
               </div>
-            </div>
+            </ReusableCard>
 
-            {/* Direct Contact Channels */}
-            <div className="glass-dark-architectural rounded-2xl p-6 border border-white/10 bg-[#111418] space-y-4">
-              <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                <Phone className="h-4 w-4 text-[#02A4EF]" />
-                Direct Corporate Communication
+            {/* Direct Communication Channels */}
+            <ReusableCard
+              variant="elevated"
+              className="p-6 border-white/10 bg-[#131313]/90 space-y-4"
+            >
+              <h4 className="text-xs font-mono font-bold uppercase tracking-[0.2em] text-white flex items-center gap-2">
+                <Phone className="h-4 w-4 text-[#f97316]" />
+                Direct Channels
               </h4>
 
               <div className="space-y-2.5 font-mono text-xs">
                 <a
                   href="mailto:info@grevya.com"
-                  className="flex items-center gap-3 p-3 rounded-lg bg-white/5 border border-white/10 hover:border-[#02A4EF]/40 transition-all text-slate-200"
+                  className="flex items-center gap-3 p-3.5 rounded-[10px] bg-[#1a1a1a] border border-white/10 hover:border-[#f97316]/50 transition-colors text-slate-200"
                 >
-                  <Mail className="h-4 w-4 text-[#02A4EF]" />
+                  <Mail className="h-4 w-4 text-[#f97316]" />
                   <span>info@grevya.com</span>
                 </a>
                 <a
                   href="tel:+916381734688"
-                  className="flex items-center gap-3 p-3 rounded-lg bg-white/5 border border-white/10 hover:border-[#02A4EF]/40 transition-all text-slate-200"
+                  className="flex items-center gap-3 p-3.5 rounded-[10px] bg-[#1a1a1a] border border-white/10 hover:border-[#f97316]/50 transition-colors text-slate-200"
                 >
-                  <Phone className="h-4 w-4 text-[#02A4EF]" />
+                  <Phone className="h-4 w-4 text-[#f97316]" />
                   <span>+91 6381734688</span>
                 </a>
-                <div className="flex items-center gap-3 p-3 rounded-lg bg-white/5 border border-white/10 text-slate-400">
-                  <Clock className="h-4 w-4 text-slate-400" />
-                  <span>Direct Engineering Review</span>
+                <div className="flex items-start gap-3 p-3.5 rounded-[10px] bg-[#1a1a1a] border border-white/10 text-slate-400">
+                  <MapPin className="h-4 w-4 text-[#f97316] flex-shrink-0 mt-0.5" />
+                  <span className="text-[11px] leading-relaxed">
+                    4th South Cross St., Kovai Thiru Nagar, Kalapatty (E), Coimbatore 641014
+                  </span>
                 </div>
               </div>
-            </div>
+            </ReusableCard>
 
-          </motion.div>
+          </RevealOnScroll>
 
         </div>
 
@@ -292,7 +311,3 @@ const Contact = () => {
 };
 
 export default Contact;
-
-
-
-

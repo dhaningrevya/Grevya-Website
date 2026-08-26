@@ -55,7 +55,7 @@ const copy: AcceleratorCopy = {
   ],
   solutionTitle: "A multi-agent platform your security team will actually approve",
   solutionBody:
-    "Orchestrate specialist agents across your workflow with typed state, policy-level constraints, and full execution tracing. Built on LangGraph, CrewAI, and the Microsoft Agent Framework with a provider-agnostic LLM layer, so you can mix Claude, GPT, Gemini, and open-source models per task.",
+    "Orchestrate specialist agents across your workflow with typed state, policy-level constraints, and full execution tracing. Built on LangGraph, CrewAI, and Microsoft Agent Framework with provider-agnostic LLM routing.",
   solutionBullets: [
     "Deterministic orchestration with fallback & retry policies",
     "PII redaction and policy enforcement at every agent boundary",
@@ -82,26 +82,6 @@ const copy: AcceleratorCopy = {
       icon: Activity,
       title: "Full Observability",
       body: "OpenTelemetry traces, token-level cost attribution, and replayable execution timelines for every workflow.",
-    },
-    {
-      icon: Workflow,
-      title: "Tool & MCP Integration",
-      body: "Plug into any internal API, database, or MCP server with auth, rate-limiting, and caching handled for you.",
-    },
-    {
-      icon: Lock,
-      title: "Enterprise Security",
-      body: "SSO, RBAC, encryption at rest, audit logging, and tenant isolation — SOC 2 and HIPAA-ready architecture.",
-    },
-    {
-      icon: Zap,
-      title: "Model Agnostic",
-      body: "Route tasks to Claude, GPT, Gemini, Llama, or self-hosted models. Swap providers without code changes.",
-    },
-    {
-      icon: Target,
-      title: "Production QC",
-      body: "Automated eval suites, regression tests, and canary deployments for every prompt and agent revision.",
     },
   ],
   useCases: [
@@ -138,7 +118,7 @@ const copy: AcceleratorCopy = {
 };
 
 const AgenticAIPage = () => (
-  <div className="min-h-screen bg-white">
+  <div className="min-h-screen bg-[#0a0a0a] text-[#fafafa]">
     <Navigation />
     <main id="main-content">
       <AcceleratorLayout copy={copy} />

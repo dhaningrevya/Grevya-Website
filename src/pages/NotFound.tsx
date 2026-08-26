@@ -1,6 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
 import { useEffect } from "react";
-import { Button } from "@/components/ui/button";
 import { Home, ArrowLeft } from "lucide-react";
 
 const NotFound = () => {
@@ -16,36 +15,39 @@ const NotFound = () => {
   return (
     <main
       id="main-content"
-      className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50 px-4"
+      className="min-h-screen flex items-center justify-center bg-[#0a0a0a] text-[#fafafa] px-4 relative overflow-hidden"
     >
-      <div className="text-center max-w-xl">
-        <p className="text-sm font-semibold uppercase tracking-widest text-primary-600 mb-3">
-          404 Error
-        </p>
-        <h1 className="text-6xl sm:text-7xl font-extrabold text-gray-900 mb-4">
-          Page not found
+      <div className="absolute inset-0 bg-arch-grid opacity-30 pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#f97316]/10 rounded-full blur-[160px] pointer-events-none" />
+
+      <div className="text-center max-w-xl space-y-6 relative z-10">
+        <span className="px-3 py-1 rounded-full bg-[#f97316]/10 border border-[#f97316]/20 font-mono text-xs font-bold uppercase tracking-[0.2em] text-[#f97316]">
+          404 ARCHITECTURE FAULT
+        </span>
+
+        <h1 className="font-display text-5xl sm:text-7xl font-extrabold uppercase text-white tracking-tighter">
+          Page Not Found
         </h1>
-        <p className="text-lg text-gray-600 mb-8">
-          We couldn't find <code className="bg-gray-200 px-2 py-0.5 rounded text-sm">{location.pathname}</code>. It may have moved, or the link may be outdated.
+
+        <p className="font-sans text-base text-[#a1a1a1]">
+          The route <code className="bg-[#1a1a1a] border border-white/10 px-2 py-1 rounded font-mono text-xs text-[#f97316]">{location.pathname}</code> does not exist or has been relocated.
         </p>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-          <Button
-            asChild
-            className="bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white px-6 py-6 font-semibold shadow-lg hover:shadow-xl transition-all"
+
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#f97316] hover:bg-[#ea580c] text-white font-sans text-xs font-bold uppercase tracking-[0.2em] transition-all shadow-accent-glow"
           >
-            <Link to="/">
-              <Home className="h-4 w-4 mr-2" />
-              Back to Home
-            </Link>
-          </Button>
-          <Button
-            variant="outline"
+            <Home className="h-4 w-4" />
+            <span>Back to Home</span>
+          </Link>
+          <button
             onClick={() => window.history.back()}
-            className="px-6 py-6 font-semibold"
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#131313] hover:bg-[#1a1a1a] border border-white/10 text-white font-sans text-xs font-bold uppercase tracking-[0.2em] transition-all"
           >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Go Back
-          </Button>
+            <ArrowLeft className="h-4 w-4" />
+            <span>Go Back</span>
+          </button>
         </div>
       </div>
     </main>
