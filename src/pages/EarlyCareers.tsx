@@ -1,8 +1,6 @@
+import React, { useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import {
   Accordion,
   AccordionContent,
@@ -17,59 +15,49 @@ import {
   TrendingUp,
   ArrowRight,
   Zap,
-  Target,
-  Heart,
-  Briefcase,
+  CheckCircle2,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import Eyebrow from "@/components/primitives/Eyebrow";
 import GradientText from "@/components/primitives/GradientText";
 
-const whatSetsUsApart = [
+const fellowshipStages = [
   {
-    icon: Rocket,
-    title: "Hands-on, Production Work",
-    body: "You won't be shadowing. Fellows ship real features into real production systems that enterprise clients depend on — from day one.",
+    id: "apply",
+    step: "01",
+    label: "APPLY",
+    title: "Engineering Assessment & Selection",
+    desc: "Demonstrate curiosity and CS fundamentals through our practical coding assessment.",
+    activity: "Domain alignment & foundational code review",
+    skills: ["Data Structures", "Python/TypeScript", "System Logic"]
   },
   {
-    icon: Users,
-    title: "Expert Mentorship",
-    body: "One-on-one with senior AI/ML engineers who have built LLM systems at scale. Weekly design reviews, daily pairing.",
+    id: "learn",
+    step: "02",
+    label: "LEARN",
+    title: "Curated AI Architecture Intensive",
+    desc: "1-on-1 mentorship with senior AI engineers covering RAG, multi-agent frameworks, and MLOps.",
+    activity: "Weekly architecture reviews & pairing sessions",
+    skills: ["Vector DBs", "LLM Orchestration", "API Design"]
   },
   {
-    icon: TrendingUp,
-    title: "Performance-Based Conversion",
-    body: "Strong fellows are converted to full-time roles with a direct, transparent performance rubric. No guessing, no politics.",
+    id: "build",
+    step: "03",
+    label: "BUILD",
+    title: "Production System Execution",
+    desc: "Ship real feature modules into production software systems under senior guidance.",
+    activity: "Production feature ownership from day one",
+    skills: ["State Management", "Guardrails", "Observability"]
   },
   {
-    icon: GraduationCap,
-    title: "Structured Learning Path",
-    body: "Curated curriculum on LLMs, agents, RAG, MLOps, and production ML — paired with a learning budget for books, courses, and conferences.",
-  },
-];
-
-const testimonials = [
-  {
-    initials: "SR",
-    name: "Fellow, AI Engineering",
-    role: "Converted to full-time",
-    quote:
-      "I expected to watch. Instead, I was shipping production code to a Fortune 500 client in my third week. The mentorship is the real deal — senior engineers actually have time for you.",
-  },
-  {
-    initials: "AK",
-    name: "Fellow, Data Science",
-    role: "Full-time AI Engineer",
-    quote:
-      "The RAG system I built as a fellow is still in production. Grevya trusts fellows with real scope — that's rare, and it's the thing that made me stay.",
-  },
-  {
-    initials: "RK",
-    name: "Fellow, Full Stack",
-    role: "Converted to full-time",
-    quote:
-      "Six months here taught me more about production AI than the two years before it. No busywork, no demos — just real systems at enterprise scale.",
-  },
+    id: "ship",
+    step: "04",
+    label: "SHIP",
+    title: "Full-Time Conversion Milestone",
+    desc: "Evaluation against transparent performance rubrics for direct full-time engineering conversion.",
+    activity: "Final architecture review & full-time offer",
+    skills: ["System Ownership", "Client Integration", "Production Scale"]
+  }
 ];
 
 const faqs = [
@@ -99,183 +87,144 @@ const faqs = [
   },
 ];
 
-const EarlyCareersPage = () => (
-  <div className="min-h-screen bg-[#0a0a0a] text-[#fafafa]">
-    <Navigation />
-    <main id="main-content">
-      {/* Hero */}
-      <section className="relative pt-32 sm:pt-40 pb-20 sm:pb-28 overflow-hidden bg-[#0a0a0a] border-b border-white/10">
-        <div className="absolute inset-0 bg-arch-grid opacity-30 pointer-events-none"></div>
-        <div className="absolute top-1/4 right-10 w-[500px] h-[500px] bg-[#f97316]/10 rounded-full blur-[140px] pointer-events-none"></div>
+export const EarlyCareers: React.FC = () => {
+  const [activeStageId, setActiveStageId] = useState<string>("apply");
 
-        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+  const activeStage = fellowshipStages.find((s) => s.id === activeStageId) || fellowshipStages[0];
+
+  return (
+    <div className="min-h-screen bg-[#0a0a0a] text-[#fafafa] selection:bg-[#f97316]/30 selection:text-white select-none">
+      <Navigation />
+      
+      <main id="main-content" className="pt-32 sm:pt-40 pb-24 space-y-20">
+        
+        {/* Fellowship Hero */}
+        <div className="max-w-[1536px] mx-auto px-6 sm:px-10 lg:px-16 space-y-6 text-left">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#131313] border border-white/10 text-xs font-mono font-semibold uppercase tracking-[0.15em] text-[#f97316]">
-            <Sparkles className="h-4 w-4" />
-            <span>Grevya Elevate Fellowship</span>
+            <Sparkles className="h-4 w-4 text-[#f97316]" />
+            <span>EARLY CAREER FELLOWSHIP</span>
           </div>
-          
-          <h1 className="font-display text-4xl sm:text-6xl md:text-7xl font-extrabold uppercase text-[#fafafa] tracking-tight leading-tight">
-            Learn real AI by <GradientText className="inline">shipping real AI</GradientText>
+
+          <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-extrabold uppercase text-white tracking-tight leading-[0.92]">
+            Launch Your Career In <br />
+            <GradientText className="inline">Production AI Engineering.</GradientText>
           </h1>
-          
-          <p className="font-sans text-lg sm:text-xl text-[#a1a1a1] max-w-3xl mx-auto font-normal leading-relaxed">
-            A 6-12 month paid fellowship for engineers, designers, and PMs who want to build production AI systems — not slide decks.
+
+          <p className="font-sans text-[#a1a1a1] text-base sm:text-xl max-w-3xl leading-relaxed">
+            The Grevya AI Engineering Fellowship is an intensive, mentorship-driven program where early-career engineers ship production AI systems.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
+          <div className="pt-4">
             <Link
-              to="/careers#application-form"
-              className="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-[#f97316] hover:bg-[#ea580c] text-white font-sans font-bold text-xs uppercase tracking-[0.2em] transition-all shadow-accent-glow"
+              to="/careers#apply-form"
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#f97316] hover:bg-[#ea580c] text-white font-sans font-bold text-xs uppercase tracking-[0.2em] transition-all shadow-accent-glow"
             >
-              <span>Apply to the Cohort</span>
+              <span>Apply For Fellowship</span>
               <ArrowRight className="h-4 w-4" />
             </Link>
-            <a
-              href="#fellowship-details"
-              className="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-[#131313] hover:bg-[#1a1a1a] border border-white/15 text-white font-sans font-bold text-xs uppercase tracking-[0.2em] transition-all"
-            >
-              See how it works
-            </a>
           </div>
         </div>
-      </section>
 
-      {/* What Sets Us Apart */}
-      <section id="fellowship-details" className="py-20 bg-[#0a0a0a]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12 sm:mb-16 space-y-3">
-            <Eyebrow label="WHY GREVYA ELEVATE" />
-            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold uppercase text-[#fafafa]">
-              What Sets This Fellowship Apart
+        {/* Interactive Fellowship Journey Track (APPLY -> LEARN -> BUILD -> SHIP) */}
+        <div className="max-w-[1536px] mx-auto px-6 sm:px-10 lg:px-16 space-y-8">
+          <div className="space-y-2">
+            <Eyebrow label="FELLOWSHIP PROGRESSION" />
+            <h2 className="font-display text-3xl sm:text-4xl font-extrabold uppercase text-white">
+              The 4-Stage Fellowship Journey
             </h2>
-            <p className="font-sans text-base sm:text-lg text-[#a1a1a1] max-w-2xl mx-auto">
-              We don't do demo-day internships. You ship real work, with real mentorship, with a real path to full-time.
-            </p>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {whatSetsUsApart.map((item) => (
-              <Card
-                key={item.title}
-                className="bg-[#131313] border-white/10 hover:border-white/20 transition-all text-[#fafafa]"
-              >
-                <CardHeader className="p-6">
-                  <div className="w-12 h-12 rounded-xl bg-[#f97316]/10 border border-[#f97316]/20 flex items-center justify-center mb-4 text-[#f97316]">
-                    <item.icon className="h-6 w-6" />
-                  </div>
-                  <CardTitle className="text-lg font-display font-bold uppercase text-white">{item.title}</CardTitle>
-                </CardHeader>
-                <CardContent className="p-6 pt-0">
-                  <p className="text-[#a1a1a1] text-sm font-sans leading-relaxed">{item.body}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* Growing Talent */}
-      <section className="py-20 bg-[#131313] border-y border-white/10">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-10 items-center">
-            <div className="space-y-6">
-              <span className="text-xs font-mono font-semibold uppercase tracking-[0.2em] text-[#f97316]">
-                Year-Round Cohorts
+          {/* Journey Track Selector Buttons */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {fellowshipStages.map((stage) => {
+              const isSelected = activeStageId === stage.id;
+              return (
+                <button
+                  key={stage.id}
+                  onClick={() => setActiveStageId(stage.id)}
+                  onMouseEnter={() => setActiveStageId(stage.id)}
+                  onFocus={() => setActiveStageId(stage.id)}
+                  className={`p-4 rounded-xl border text-left transition-all duration-300 focus:outline-none ${
+                    isSelected
+                      ? "bg-[#131313] border-[#f97316] shadow-md border-l-4"
+                      : "bg-[#131313]/40 border-white/10 text-slate-400 hover:border-white/20 hover:text-white"
+                  }`}
+                >
+                  <div className="text-[10px] font-mono font-bold text-[#f97316] uppercase mb-1">
+                    STAGE {stage.step}
+                  </div>
+                  <div className={`text-base font-display font-bold uppercase ${isSelected ? "text-white" : "text-slate-300"}`}>
+                    {stage.label}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Active Stage Inspector Panel */}
+          <div className="p-6 sm:p-8 rounded-2xl bg-[#131313]/90 backdrop-blur-2xl border border-white/12 space-y-6 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-white/10 pb-4 font-mono text-xs">
+              <div className="flex items-center gap-2 text-white font-bold uppercase">
+                <GraduationCap className="h-4 w-4 text-[#f97316]" />
+                <span>STAGE {activeStage.step}: {activeStage.title}</span>
+              </div>
+              <span className="text-[10px] text-emerald-400 font-bold px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">
+                ACTIVE MILESTONE
               </span>
-              <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold uppercase text-[#fafafa] leading-tight">
-                We invest in talent <GradientText className="inline">year-round</GradientText>
-              </h2>
-              <p className="font-sans text-base text-[#a1a1a1] leading-relaxed">
-                Unlike most companies, we don't run a single intake window. Cohorts start every quarter, because production AI teams need fresh perspective continuously — and the right candidate shouldn't have to wait 9 months for a requisition.
-              </p>
-              <Link
-                to="/careers#application-form"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#f97316] text-white font-sans text-xs font-bold uppercase tracking-[0.15em]"
-              >
-                <span>Partner with our placement team</span>
-                <ArrowRight className="h-4 w-4" />
-              </Link>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <Card className="bg-[#1a1a1a] border-white/10 p-6 text-[#fafafa]">
-                <Zap className="h-7 w-7 text-[#f97316] mb-3" />
-                <div className="text-3xl font-display font-extrabold text-[#f97316] mb-1">4</div>
-                <div className="text-xs font-mono uppercase tracking-wider text-[#a1a1a1]">Cohorts per year</div>
-              </Card>
-              <Card className="bg-[#1a1a1a] border-white/10 p-6 text-[#fafafa]">
-                <Target className="h-7 w-7 text-[#f97316] mb-3" />
-                <div className="text-3xl font-display font-extrabold text-[#f97316] mb-1">5</div>
-                <div className="text-xs font-mono uppercase tracking-wider text-[#a1a1a1]">Tracks offered</div>
-              </Card>
-              <Card className="bg-[#1a1a1a] border-white/10 p-6 text-[#fafafa]">
-                <Heart className="h-7 w-7 text-[#f97316] mb-3" />
-                <div className="text-3xl font-display font-extrabold text-[#f97316] mb-1">Paid</div>
-                <div className="text-xs font-mono uppercase tracking-wider text-[#a1a1a1]">Every fellowship</div>
-              </Card>
-              <Card className="bg-[#1a1a1a] border-white/10 p-6 text-[#fafafa]">
-                <Briefcase className="h-7 w-7 text-[#f97316] mb-3" />
-                <div className="text-3xl font-display font-extrabold text-[#f97316] mb-1">6-12 mo</div>
-                <div className="text-xs font-mono uppercase tracking-wider text-[#a1a1a1]">Duration</div>
-              </Card>
+
+            <p className="font-sans text-sm text-[#a1a1a1] leading-relaxed max-w-3xl">
+              {activeStage.desc}
+            </p>
+
+            <div className="grid md:grid-cols-2 gap-6 pt-2 font-mono text-xs">
+              <div className="p-4 rounded-xl bg-[#1a1a1a] border border-white/10 space-y-2">
+                <div className="text-[10px] text-[#6b6b6b] uppercase">Expected Core Activity</div>
+                <div className="text-white font-bold">{activeStage.activity}</div>
+              </div>
+
+              <div className="p-4 rounded-xl bg-[#1a1a1a] border border-white/10 space-y-2">
+                <div className="text-[10px] text-[#6b6b6b] uppercase">Key Skills & Modules</div>
+                <div className="flex flex-wrap gap-1.5">
+                  {activeStage.skills.map(s => (
+                    <span key={s} className="px-2 py-0.5 rounded bg-[#0a0a0a] text-[10px] text-emerald-400 font-bold border border-white/5">
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </section>
 
-      {/* Testimonials */}
-      <section className="py-20 bg-[#0a0a0a]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12 space-y-3">
-            <Eyebrow label="FELLOW TESTIMONIALS" />
-            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold uppercase text-[#fafafa]">
-              Voices of Our Fellows
-            </h2>
+        {/* FAQ Accordion */}
+        <div className="max-w-4xl mx-auto px-6 space-y-6">
+          <div className="text-center space-y-2">
+            <Eyebrow label="FREQUENTLY ASKED QUESTIONS" />
+            <h3 className="font-display text-2xl sm:text-3xl font-bold uppercase text-white">
+              Fellowship FAQs
+            </h3>
           </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {testimonials.map((t) => (
-              <Card key={t.initials} className="bg-[#131313] border-white/10 text-[#fafafa] p-6 space-y-4">
-                <CardContent className="p-0 space-y-4">
-                  <p className="text-[#a1a1a1] text-sm font-sans italic leading-relaxed">"{t.quote}"</p>
-                  <div className="flex items-center gap-3 pt-2 border-t border-white/10">
-                    <div className="w-10 h-10 rounded-full bg-[#f97316]/20 border border-[#f97316]/40 flex items-center justify-center text-[#f97316] font-mono text-xs font-bold">
-                      {t.initials}
-                    </div>
-                    <div>
-                      <div className="font-bold text-white text-sm font-sans">{t.name}</div>
-                      <div className="text-xs text-[#a1a1a1] font-mono">{t.role}</div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* FAQ */}
-      <section className="py-20 bg-[#131313] border-t border-white/10">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold uppercase text-[#fafafa]">
-              Frequently Asked Questions
-            </h2>
-          </div>
-          <Accordion type="single" collapsible className="bg-[#1a1a1a] rounded-2xl border border-white/10 px-6 divide-y divide-white/10">
-            {faqs.map((item, i) => (
-              <AccordionItem key={item.q} value={`item-${i}`} className="border-b-0 py-2">
-                <AccordionTrigger className="text-left text-base sm:text-lg font-display font-semibold text-white hover:text-[#f97316] py-4">
-                  {item.q}
+          <Accordion type="single" collapsible className="w-full space-y-3 font-sans text-sm">
+            {faqs.map((faq, i) => (
+              <AccordionItem key={i} value={`item-${i}`} className="bg-[#131313] border border-white/10 rounded-xl px-5 py-1">
+                <AccordionTrigger className="font-display font-bold uppercase text-white hover:text-[#f97316] text-left">
+                  {faq.q}
                 </AccordionTrigger>
-                <AccordionContent className="text-[#a1a1a1] font-sans text-sm leading-relaxed pb-4">
-                  {item.a}
+                <AccordionContent className="text-[#a1a1a1] leading-relaxed">
+                  {faq.a}
                 </AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
         </div>
-      </section>
-    </main>
-    <Footer />
-  </div>
-);
 
-export default EarlyCareersPage;
+      </main>
+
+      <Footer />
+    </div>
+  );
+};
+
+export default EarlyCareers;

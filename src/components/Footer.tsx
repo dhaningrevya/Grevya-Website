@@ -8,35 +8,35 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="relative bg-[#050505] text-[#fafafa] py-16 border-t border-white/10 overflow-hidden">
+    <footer className="relative bg-[#050505] text-[#fafafa] py-12 sm:py-16 border-t border-white/10 overflow-hidden select-none">
       {/* Background Atmosphere */}
       <div className="absolute inset-0 bg-arch-grid opacity-20 pointer-events-none" />
 
-      <div className="relative max-w-[1536px] mx-auto px-6 sm:px-10 lg:px-16 z-10 w-full space-y-12">
+      <div className="relative max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-16 z-10 w-full space-y-10 sm:space-y-12">
         
-        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10">
+        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10">
           
           {/* Brand & Address Column */}
           <div className="lg:col-span-5 space-y-4">
-            <div className="flex items-center gap-3">
-              <img
-                src="/Grevya Logo.svg"
-                alt="Grevya"
-                className="h-12 sm:h-14 w-auto filter drop-shadow"
-                style={{ maxWidth: "210px" }}
-              />
-              <div className="flex items-center gap-1.5 ml-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#f97316]" />
-                <span className="w-2.5 h-2.5 rounded-full bg-[#fb923c]" />
-                <span className="w-2.5 h-2.5 rounded-full bg-[#ef4444]" />
+            <div className="space-y-2">
+              <div className="flex items-center gap-3">
+                <img
+                  src="/Grevya Logo Presentation.svg"
+                  alt="Grevya"
+                  className="h-12 sm:h-14 md:h-16 w-auto"
+                  style={{ maxWidth: "220px" }}
+                />
+              </div>
+              <div className="text-[10px] font-mono tracking-[0.25em] text-[#f97316] font-bold uppercase">
+                PRODUCTION ENTERPRISE AI
               </div>
             </div>
             
-            <p className="font-sans text-[#a1a1a1] text-sm leading-relaxed max-w-sm">
+            <p className="font-sans text-[#a1a1a1] text-xs sm:text-sm leading-relaxed max-w-sm">
               Grevya Technologies Pvt Ltd — Engineering autonomous AI platforms, agentic workflows, and cloud SaaS infrastructure for enterprise scale.
             </p>
 
-            <div className="space-y-2.5 pt-2 text-xs font-mono text-[#a1a1a1]">
+            <div className="space-y-2.5 pt-1 text-xs font-mono text-[#a1a1a1]">
               <div className="flex items-start gap-2.5">
                 <MapPin className="h-4 w-4 text-[#f97316] mt-0.5 flex-shrink-0" />
                 <span className="leading-relaxed text-slate-300">
@@ -70,17 +70,17 @@ export const Footer: React.FC = () => {
             <ul className="space-y-2.5 text-xs font-sans text-[#a1a1a1]">
               <li>
                 <Link to="/solutions/agentic-ai" className="hover:text-white transition-colors">
-                  • Agentic AI Accelerator
+                  • Agentic AI Engine
                 </Link>
               </li>
               <li>
                 <Link to="/solutions/data-analytics" className="hover:text-white transition-colors">
-                  • AI Data Analytics & NL2SQL
+                  • AI Data Analytics
                 </Link>
               </li>
               <li>
                 <Link to="/solutions/ai-content-generation" className="hover:text-white transition-colors">
-                  • AI Content Generation Engine
+                  • AI Content Engine
                 </Link>
               </li>
               <li>
@@ -100,22 +100,22 @@ export const Footer: React.FC = () => {
           <div className="lg:col-span-4 space-y-4">
             <h4 className="text-xs font-mono font-bold uppercase tracking-[0.2em] text-[#f97316] flex items-center gap-2">
               <ShieldCheck className="h-3.5 w-3.5" />
-              <span>Company & Platform</span>
+              <span>Company & Governance</span>
             </h4>
             <ul className="space-y-2.5 text-xs font-sans text-[#a1a1a1]">
               <li>
                 <Link to="/about" className="hover:text-white transition-colors">
-                  • About Grevya Technologies
+                  • About Grevya Studio
                 </Link>
               </li>
               <li>
                 <Link to="/careers" className="hover:text-white transition-colors">
-                  • Careers & Open Engineering Roles
+                  • Engineering Careers
                 </Link>
               </li>
               <li>
                 <Link to="/early-careers" className="hover:text-white transition-colors">
-                  • Elevate Fellowship (Early Hires)
+                  • Elevate Early Career Fellowship
                 </Link>
               </li>
               <li>
@@ -133,36 +133,18 @@ export const Footer: React.FC = () => {
 
         </div>
 
-        {/* Factual Trust Signal Strip */}
-        <div className="border-t border-white/10 pt-6">
-          <div className="flex flex-wrap justify-between items-center gap-4 text-xs font-mono text-[#a1a1a1]">
-            <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#f97316]" />
-              <span>Enterprise Guardrails & Data Privacy</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#fb923c]" />
-              <span>Built in India • Serving Enterprises Globally</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#ef4444]" />
-              <span>Modular & Scalable AI Software Systems</span>
-            </div>
-          </div>
-        </div>
-
         {/* Bottom Bar */}
-        <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-[#a1a1a1] text-xs text-center sm:text-left font-mono">
-            &copy; {new Date().getFullYear()} Grevya Technologies Pvt Ltd. All rights reserved.
-          </p>
+        <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-[11px] text-[#a1a1a1]">
+          <div>
+            © {new Date().getFullYear()} Grevya Technologies Pvt Ltd. All rights reserved.
+          </div>
 
           <button
             onClick={scrollToTop}
-            className="inline-flex items-center gap-1.5 text-xs font-mono text-[#a1a1a1] hover:text-white transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#131313] border border-white/10 hover:border-white/20 text-white transition-colors focus:outline-none"
           >
-            <ArrowUp className="h-3.5 w-3.5 text-[#f97316]" />
             <span>Back to Top</span>
+            <ArrowUp className="h-3.5 w-3.5 text-[#f97316]" />
           </button>
         </div>
 

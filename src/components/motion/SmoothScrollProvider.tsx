@@ -5,6 +5,20 @@ export interface SmoothScrollProviderProps {
   children: ReactNode;
 }
 
+let globalLenisInstance: Lenis | null = null;
+
+export const pauseSmoothScroll = () => {
+  if (globalLenisInstance) {
+    globalLenisInstance.stop();
+  }
+};
+
+export const resumeSmoothScroll = () => {
+  if (globalLenisInstance) {
+    globalLenisInstance.start();
+  }
+};
+
 export const SmoothScrollProvider: React.FC<SmoothScrollProviderProps> = ({ children }) => {
   useEffect(() => {
     // Respect prefers-reduced-motion
@@ -25,20 +39,38 @@ export const SmoothScrollProvider: React.FC<SmoothScrollProviderProps> = ({ chil
         touchMultiplier: 1.8,
       });
 
+      globalLenisInstance = lenis;
+
       const raf = (time: number) => {
-        lenis?.raf(time);
-        rafId = requestAnimationFrame(raf);
+        if (lenis) {
+          lenis.raf(time);
+          rafId = requestAnimationFrame(raf);
+        }
       };
 
       rafId = requestAnimationFrame(raf);
+
+      const handlePause = () => {
+        globalLenisInstance?.stop();
+      };
+
+      const handleResume = () => {
+        globalLenisInstance?.start();
+      };
+
+      window.addEventListener("grevya:pause-scroll", handlePause);
+      window.addEventListener("grevya:resume-scroll", handleResume);
+
+      return () => {
+        window.removeEventListener("grevya:pause-scroll", handlePause);
+        window.removeEventListener("grevya:resume-scroll", handleResume);
+        if (rafId !== null) cancelAnimationFrame(rafId);
+        if (lenis) lenis.destroy();
+        globalLenisInstance = null;
+      };
     } catch (err) {
       console.warn("Lenis smooth scroll initialization skipped:", err);
     }
-
-    return () => {
-      if (rafId !== null) cancelAnimationFrame(rafId);
-      if (lenis) lenis.destroy();
-    };
   }, []);
 
   return <>{children}</>;

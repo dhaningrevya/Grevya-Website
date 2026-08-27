@@ -1,54 +1,97 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { X, ArrowUpRight, Mail, Phone, MapPin, Cpu, Database, Layers, Shield, FileCode } from "lucide-react";
+import { X, ArrowUpRight, Cpu, Database, Layers, Search, ChevronDown } from "lucide-react";
 import Eyebrow from "@/components/primitives/Eyebrow";
-import Pill from "@/components/primitives/Pill";
-import GradientText from "@/components/primitives/GradientText";
+import { pauseSmoothScroll, resumeSmoothScroll } from "@/components/motion/SmoothScrollProvider";
 
 export interface FullscreenNavOverlayProps {
   isOpen: boolean;
   onClose: () => void;
+  triggerRef?: React.RefObject<HTMLButtonElement>;
 }
+
+const primaryLinks = [
+  { id: "home", label: "Home", to: "/" },
+  { id: "products", label: "Products & Systems", sectionId: "products" },
+  { id: "about", label: "About Grevya", sectionId: "about" },
+  { id: "industries", label: "Target Industries", sectionId: "industries" },
+  { id: "contact", label: "Initiate Contact", sectionId: "contact" },
+];
 
 const solutionLinks = [
   { to: "/solutions/agentic-ai", label: "Agentic AI Engine", desc: "Multi-agent autonomous system architecture", icon: Cpu },
-  { to: "/solutions/data-analytics", label: "AI Data Analytics", desc: "Natural language to SQL data pipeline", icon: Database },
-  { to: "/solutions/ai-content-generation", label: "AI Content Engine", desc: "Multi-modal structured generation", icon: Layers },
-  { to: "/solutions/ai-consulting", label: "AI Strategy & Audit", desc: "Technical feasibility & architecture review", icon: Shield },
-  { to: "/solutions/ai-software-development", label: "AI Software Engineering", desc: "Full-stack enterprise AI engineering", icon: FileCode },
-  { to: "/solutions/rag-application", label: "RAG Knowledge Systems", desc: "Production retrieval augmented generation", icon: Cpu },
-  { to: "/solutions/erp", label: "ERP & Custom Modules", desc: "Enterprise system automation", icon: Layers },
+  { to: "/solutions/data-analytics", label: "AI Data Analytics", desc: "Structured analytical decision pipeline", icon: Database },
+  { to: "/solutions/ai-content-generation", label: "AI Content Engine", desc: "Grounded commercial proposal studio", icon: Layers },
+  { to: "/solutions/rag-application", label: "RAG Knowledge Systems", desc: "Production retrieval augmented generation", icon: Search },
 ];
 
 const companyLinks = [
-  { to: "/about", label: "About Grevya", desc: "Engineering Studio & Principles" },
   { to: "/careers", label: "Careers", desc: "Open Engineering Positions" },
   { to: "/early-careers", label: "Early Hires", desc: "Elevate Fellowship Program" },
+];
+
+const utilityLinks = [
+  { to: "/privacy", label: "Privacy Policy" },
+  { to: "/terms", label: "Terms of Service" },
 ];
 
 export const FullscreenNavOverlay: React.FC<FullscreenNavOverlayProps> = ({
   isOpen,
   onClose,
+  triggerRef,
 }) => {
+  const [isSolutionsAccordionOpen, setIsSolutionsAccordionOpen] = useState(true);
   const location = useLocation();
   const navigate = useNavigate();
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const scrollPosRef = useRef<number>(0);
   const shouldReduceMotion = useReducedMotion();
   const isHomePage = location.pathname === "/";
 
-  // Lock body scroll while open
+  // Lock document scroll while overlay is open
   useEffect(() => {
     if (isOpen) {
-      const originalOverflow = document.body.style.overflow;
+      pauseSmoothScroll();
+      window.dispatchEvent(new CustomEvent("grevya:pause-scroll"));
+
+      scrollPosRef.current = window.scrollY;
+
+      const origDocOverflow = document.documentElement.style.overflow;
+      const origDocHeight = document.documentElement.style.height;
+      const origBodyOverflow = document.body.style.overflow;
+      const origBodyHeight = document.body.style.height;
+      const origBodyPosition = document.body.style.position;
+      const origBodyWidth = document.body.style.width;
+      const origBodyTop = document.body.style.top;
+
+      document.documentElement.style.overflow = "hidden";
+      document.documentElement.style.height = "100%";
       document.body.style.overflow = "hidden";
+      document.body.style.height = "100%";
+      document.body.style.position = "fixed";
+      document.body.style.width = "100%";
+      document.body.style.top = `-${scrollPosRef.current}px`;
+
       closeButtonRef.current?.focus();
 
       return () => {
-        document.body.style.overflow = originalOverflow;
+        resumeSmoothScroll();
+        window.dispatchEvent(new CustomEvent("grevya:resume-scroll"));
+
+        document.documentElement.style.overflow = origDocOverflow;
+        document.documentElement.style.height = origDocHeight;
+        document.body.style.overflow = origBodyOverflow;
+        document.body.style.height = origBodyHeight;
+        document.body.style.position = origBodyPosition;
+        document.body.style.width = origBodyWidth;
+        document.body.style.top = origBodyTop;
+
+        window.scrollTo(0, scrollPosRef.current);
+        triggerRef?.current?.focus();
       };
     }
-  }, [isOpen]);
+  }, [isOpen, triggerRef]);
 
   // Handle Escape Key
   useEffect(() => {
@@ -62,38 +105,28 @@ export const FullscreenNavOverlay: React.FC<FullscreenNavOverlayProps> = ({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose]);
 
-  const handleSectionNavigate = (sectionId: string) => {
+  const handleSectionNavigate = (sectionId?: string, to?: string) => {
     onClose();
-    if (!isHomePage) {
-      navigate(`/#${sectionId}`);
+    if (to && to !== "/") {
+      navigate(to);
       return;
     }
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+    if (sectionId) {
+      if (!isHomePage) {
+        navigate(`/#${sectionId}`);
+        return;
+      }
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
     }
   };
 
   const backdropVariants = {
     hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 0.3 } },
-    exit: { opacity: 0, transition: { duration: 0.2, delay: 0.1 } },
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: shouldReduceMotion ? 0 : 0.05,
-        delayChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } },
+    visible: { opacity: 1, transition: { duration: 0.25 } },
+    exit: { opacity: 0, transition: { duration: 0.2 } },
   };
 
   return (
@@ -103,25 +136,42 @@ export const FullscreenNavOverlay: React.FC<FullscreenNavOverlayProps> = ({
           id="fullscreen-nav-overlay"
           role="dialog"
           aria-modal="true"
-          aria-label="Navigation Menu"
+          aria-label="Mobile Navigation Menu"
           initial="hidden"
           animate="visible"
           exit="exit"
           variants={backdropVariants}
-          className="fixed inset-0 z-50 bg-[#0a0a0a]/98 backdrop-blur-2xl overflow-y-auto flex flex-col justify-between p-6 sm:p-10 lg:p-14"
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            height: "100dvh",
+            maxHeight: "100dvh",
+            width: "100%",
+            overflowY: "auto",
+            overflowX: "hidden",
+            overscrollBehavior: "contain",
+            WebkitOverflowScrolling: "touch",
+            zIndex: 9999,
+            paddingTop: "calc(1.25rem + env(safe-area-inset-top, 0px))",
+            paddingBottom: "calc(1.25rem + env(safe-area-inset-bottom, 0px))",
+          }}
+          className="bg-[#0a0a0a] text-[#fafafa] flex flex-col justify-between px-4 sm:px-8 select-none"
         >
           {/* Header Bar inside Overlay */}
-          <div className="flex items-center justify-between pb-8 border-b border-white/10 max-w-7xl mx-auto w-full">
+          <div className="flex items-center justify-between pb-4 border-b border-white/10 max-w-7xl mx-auto w-full flex-shrink-0">
             <Link
               to="/"
               onClick={onClose}
-              className="flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#f97316]"
+              className="flex items-center min-h-[44px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#f97316]"
             >
               <img
-                src="/Grevya Logo.svg"
+                src="/Grevya Logo Presentation.svg"
                 alt="Grevya Logo"
-                className="h-8 sm:h-9 w-auto"
-                style={{ maxWidth: "160px" }}
+                className="h-8 w-auto"
+                style={{ maxWidth: "150px" }}
               />
             </Link>
 
@@ -129,145 +179,110 @@ export const FullscreenNavOverlay: React.FC<FullscreenNavOverlayProps> = ({
               ref={closeButtonRef}
               onClick={onClose}
               aria-label="Close navigation overlay"
-              className="p-3 rounded-full bg-[#131313] hover:bg-[#1a1a1a] border border-white/10 text-white transition-all duration-200 hover:border-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#f97316]"
+              className="w-11 h-11 rounded-full bg-[#131313] hover:bg-[#1a1a1a] border border-white/10 text-white flex items-center justify-center transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#f97316]"
             >
-              <X className="h-6 w-6" />
+              <X className="h-5 w-5" />
             </button>
           </div>
 
-          {/* Main Grid Content */}
-          <motion.div
-            variants={containerVariants}
-            className="max-w-7xl mx-auto w-full my-auto py-10 grid lg:grid-cols-12 gap-10 lg:gap-14 items-start"
-          >
-            {/* Primary Wayfinding Links (Left Column) */}
-            <motion.div variants={itemVariants} className="lg:col-span-6 space-y-6">
-              <Eyebrow index="001" label="NAVIGATION INDEX" />
-
-              <nav className="space-y-4 font-display">
-                <div>
-                  <Link
-                    to="/"
-                    onClick={onClose}
-                    className="group inline-flex items-center gap-4 text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase tracking-tight text-[#fafafa] hover:text-[#f97316] transition-colors"
-                  >
-                    <span>Home</span>
-                    <ArrowUpRight className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity text-[#f97316]" />
-                  </Link>
-                </div>
-
-                <div>
+          {/* Structured Mobile Wayfinding Body */}
+          <div className="max-w-7xl mx-auto w-full py-6 my-auto space-y-8 font-sans">
+            
+            {/* PRIMARY INDEX */}
+            <div className="space-y-3">
+              <Eyebrow index="001" label="PRIMARY NAVIGATION" />
+              <nav className="space-y-1 font-display">
+                {primaryLinks.map((item) => (
                   <button
-                    onClick={() => handleSectionNavigate("products")}
-                    className="group inline-flex items-center gap-4 text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase tracking-tight text-[#fafafa] hover:text-[#f97316] transition-colors text-left"
+                    key={item.id}
+                    onClick={() => handleSectionNavigate(item.sectionId, item.to)}
+                    className="w-full min-h-[48px] py-2 px-3 rounded-xl flex items-center justify-between text-2xl font-extrabold uppercase text-[#fafafa] hover:text-[#f97316] hover:bg-white/5 transition-all text-left focus:outline-none"
                   >
-                    <span>Products & Systems</span>
-                    <ArrowUpRight className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity text-[#f97316]" />
+                    <span>{item.label}</span>
+                    <ArrowUpRight className="h-5 w-5 text-[#f97316]" />
                   </button>
-                </div>
-
-                <div>
-                  <button
-                    onClick={() => handleSectionNavigate("about")}
-                    className="group inline-flex items-center gap-4 text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase tracking-tight text-[#fafafa] hover:text-[#f97316] transition-colors text-left"
-                  >
-                    <span>About Grevya</span>
-                    <ArrowUpRight className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity text-[#f97316]" />
-                  </button>
-                </div>
-
-                <div>
-                  <button
-                    onClick={() => handleSectionNavigate("contact")}
-                    className="group inline-flex items-center gap-4 text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase tracking-tight text-[#fafafa] hover:text-[#f97316] transition-colors text-left"
-                  >
-                    <GradientText>Contact Us</GradientText>
-                    <ArrowUpRight className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity text-[#f97316]" />
-                  </button>
-                </div>
+                ))}
               </nav>
-            </motion.div>
+            </div>
 
-            {/* Solutions & Accelerators Sub-Grid (Middle Column) */}
-            <motion.div variants={itemVariants} className="lg:col-span-3 space-y-4">
-              <Eyebrow label="AI SOLUTIONS" />
-              <div className="space-y-3 font-sans text-xs">
-                {solutionLinks.map((sol) => (
+            {/* AI SOLUTION PLATFORMS (ACCORDION) */}
+            <div className="space-y-3 border-t border-white/10 pt-6">
+              <button
+                onClick={() => setIsSolutionsAccordionOpen(!isSolutionsAccordionOpen)}
+                className="w-full flex items-center justify-between min-h-[44px] focus:outline-none"
+              >
+                <Eyebrow index="002" label="AI SOLUTION PLATFORMS" />
+                <ChevronDown className={`h-4 w-4 text-[#f97316] transition-transform duration-200 ${isSolutionsAccordionOpen ? "rotate-180" : ""}`} />
+              </button>
+
+              {isSolutionsAccordionOpen && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                  {solutionLinks.map((sol) => {
+                    const Icon = sol.icon;
+                    return (
+                      <Link
+                        key={sol.to}
+                        to={sol.to}
+                        onClick={onClose}
+                        className="min-h-[52px] p-3 rounded-xl bg-[#131313] hover:bg-[#1a1a1a] border border-white/10 flex items-start gap-3 group focus:outline-none"
+                      >
+                        <div className="p-2 rounded-lg bg-white/5 group-hover:bg-[#f97316]/10 text-[#f97316] flex-shrink-0">
+                          <Icon className="h-4 w-4" />
+                        </div>
+                        <div>
+                          <div className="text-xs font-bold font-display uppercase text-white group-hover:text-[#f97316] transition-colors">
+                            {sol.label}
+                          </div>
+                          <div className="text-[10px] text-[#a1a1a1] leading-tight mt-0.5">
+                            {sol.desc}
+                          </div>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* COMPANY & UTILITY LINKS */}
+            <div className="space-y-4 border-t border-white/10 pt-6">
+              <Eyebrow index="003" label="COMPANY & UTILITY" />
+              <div className="flex flex-wrap gap-2 text-xs font-sans">
+                {companyLinks.map((item) => (
                   <Link
-                    key={sol.to}
-                    to={sol.to}
+                    key={item.to}
+                    to={item.to}
                     onClick={onClose}
-                    className="block p-3 rounded-[14px] bg-[#131313] border border-white/10 hover:border-white/20 hover:bg-[#1a1a1a] transition-all group"
+                    className="min-h-[44px] px-4 py-2.5 rounded-xl bg-[#131313] border border-white/10 text-white font-bold uppercase text-[11px] font-display hover:text-[#f97316] transition-colors flex items-center"
                   >
-                    <div className="font-semibold text-white text-sm flex items-center justify-between mb-0.5">
-                      <span>{sol.label}</span>
-                      <ArrowUpRight className="h-3.5 w-3.5 text-[#f97316] opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </div>
-                    <div className="text-slate-400 text-xs font-normal">{sol.desc}</div>
+                    {item.label}
+                  </Link>
+                ))}
+                {utilityLinks.map((item) => (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    onClick={onClose}
+                    className="min-h-[44px] px-4 py-2.5 rounded-xl bg-[#131313]/60 border border-white/5 text-[#a1a1a1] hover:text-white font-mono text-[10px] uppercase flex items-center"
+                  >
+                    {item.label}
                   </Link>
                 ))}
               </div>
-            </motion.div>
+            </div>
 
-            {/* Company & Contact Direct Info (Right Column) */}
-            <motion.div variants={itemVariants} className="lg:col-span-3 space-y-6">
-              <div className="space-y-4">
-                <Eyebrow label="COMPANY" />
-                <div className="space-y-2.5">
-                  {companyLinks.map((comp) => (
-                    <Link
-                      key={comp.to}
-                      to={comp.to}
-                      onClick={onClose}
-                      className="block p-3 rounded-[14px] bg-[#131313] border border-white/10 hover:border-white/20 hover:bg-[#1a1a1a] transition-all"
-                    >
-                      <div className="font-semibold text-white text-sm">{comp.label}</div>
-                      <div className="text-slate-400 text-xs">{comp.desc}</div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-
-              {/* Direct Communication Details */}
-              <div className="p-4 rounded-[14px] bg-[#131313] border border-white/10 space-y-3 text-xs font-sans">
-                <div className="text-xs uppercase tracking-[0.15em] font-semibold text-[#f97316]">
-                  Direct Channels
-                </div>
-                <a
-                  href="mailto:info@grevya.com"
-                  className="flex items-center gap-2.5 text-slate-300 hover:text-white transition-colors"
-                >
-                  <Mail className="h-4 w-4 text-[#f97316]" />
-                  <span>info@grevya.com</span>
-                </a>
-                <a
-                  href="tel:+916381734688"
-                  className="flex items-center gap-2.5 text-slate-300 hover:text-white transition-colors"
-                >
-                  <Phone className="h-4 w-4 text-[#f97316]" />
-                  <span>+91 6381734688</span>
-                </a>
-                <div className="flex items-center gap-2.5 text-slate-400">
-                  <MapPin className="h-4 w-4 text-slate-500" />
-                  <span>Coimbatore, Tamil Nadu, India</span>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
+          </div>
 
           {/* Footer Bar inside Overlay */}
-          <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between text-xs text-[#a1a1a1] max-w-7xl mx-auto w-full gap-4">
-            <div>GREVYA TECHNOLOGIES PVT LTD • ALL RIGHTS RESERVED</div>
-            <div className="flex items-center gap-4">
-              <Link to="/privacy" onClick={onClose} className="hover:text-white">
-                Privacy Policy
-              </Link>
+          <div className="pt-4 border-t border-white/10 max-w-7xl mx-auto w-full flex flex-col sm:flex-row items-center justify-between gap-2 font-mono text-[10px] text-[#a1a1a1] flex-shrink-0">
+            <div className="flex flex-wrap gap-2 text-center sm:text-left">
+              <span>HQ: Coimbatore, India</span>
               <span>•</span>
-              <Link to="/terms" onClick={onClose} className="hover:text-white">
-                Terms of Service
-              </Link>
+              <a href="mailto:info@grevya.com" className="hover:text-white">info@grevya.com</a>
             </div>
+            <div>© {new Date().getFullYear()} Grevya Technologies Pvt Ltd.</div>
           </div>
+
         </motion.div>
       )}
     </AnimatePresence>

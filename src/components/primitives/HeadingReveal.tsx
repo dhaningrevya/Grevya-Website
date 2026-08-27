@@ -30,7 +30,7 @@ export const HeadingReveal: React.FC<HeadingRevealProps> = ({
   }
 
   return (
-    <div className="overflow-hidden">
+    <div className="w-full">
       <motion.div
         initial={{ opacity: 0, y: 18 }}
         whileInView={{ opacity: 1, y: 0 }}

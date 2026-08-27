@@ -2,7 +2,9 @@ import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Products from "@/components/Products";
-import WhyChooseUs from "@/components/WhyChooseUs";
+import AISystemReliability from "@/components/interactive/AISystemReliability";
+import AIWorkflowPlayground from "@/components/interactive/AIWorkflowPlayground";
+import AIIntelligenceCanvas from "@/components/interactive/AIIntelligenceCanvas";
 import Industries from "@/components/Industries";
 import Portfolio from "@/components/Portfolio";
 import Contact from "@/components/Contact";
@@ -35,7 +37,9 @@ const Index = () => {
         <About />
         <Marquee items={trustTickerItems2} direction="right" speed="medium" />
         <Products />
-        <WhyChooseUs />
+        <AISystemReliability />
+        <AIWorkflowPlayground />
+        <AIIntelligenceCanvas />
         <Industries />
         <Portfolio />
         <Contact />

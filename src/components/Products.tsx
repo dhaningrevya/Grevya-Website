@@ -1,12 +1,19 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, CheckCircle2, Cpu, Database, Layers, ShieldCheck, FileCode, Workflow } from "lucide-react";
+import { ArrowRight, CheckCircle2, Database, Workflow, ShieldCheck, FileCode, Sparkles } from "lucide-react";
 import Eyebrow from "@/components/primitives/Eyebrow";
 import GradientText from "@/components/primitives/GradientText";
 import GhostNumeral from "@/components/primitives/GhostNumeral";
 import ReusableCard from "@/components/primitives/ReusableCard";
 import Pill from "@/components/primitives/Pill";
 import RevealOnScroll from "@/components/motion/RevealOnScroll";
+import PointerGlowCard from "@/components/interaction/PointerGlowCard";
+import {
+  InterviewAIVisual,
+  MedTriageVisual,
+  ProposalAIVisual,
+  TranscriptAnalyzerVisual,
+} from "@/components/product-previews";
 
 const flagshipProducts = [
   {
@@ -22,7 +29,9 @@ const flagshipProducts = [
       "Automated transcript & audio summary engine"
     ],
     route: "/solutions/agentic-ai",
-    accent: "#f97316"
+    accent: "#f97316",
+    VisualComponent: InterviewAIVisual,
+    positioning: "Turn unstructured interviews into structured hiring intelligence."
   },
   {
     numeral: "02",
@@ -37,7 +46,9 @@ const flagshipProducts = [
       "Air-gapped data retention guardrails"
     ],
     route: "/solutions/data-analytics",
-    accent: "#fb923c"
+    accent: "#fb923c",
+    VisualComponent: MedTriageVisual,
+    positioning: "Structure clinical intake and route priority decisions faster."
   },
   {
     numeral: "03",
@@ -52,7 +63,9 @@ const flagshipProducts = [
       "Automated compliance verification"
     ],
     route: "/solutions/ai-content-generation",
-    accent: "#ef4444"
+    accent: "#ef4444",
+    VisualComponent: ProposalAIVisual,
+    positioning: "Turn complex RFPs into grounded proposal workflows."
   },
   {
     numeral: "04",
@@ -67,7 +80,9 @@ const flagshipProducts = [
       "Searchable conversation vector database"
     ],
     route: "/solutions/agentic-ai",
-    accent: "#f97316"
+    accent: "#f97316",
+    VisualComponent: TranscriptAnalyzerVisual,
+    positioning: "Turn conversations into structured business decisions."
   }
 ];
 
@@ -107,7 +122,9 @@ const engineeringServices = [
 ];
 
 export const Products: React.FC = () => {
-  const [activeCategory, setActiveCategory] = useState<"all" | "flagship" | "services">("all");
+  const [activeProdIdx, setActiveProdIdx] = useState<number>(0);
+  const activeProd = flagshipProducts[activeProdIdx];
+  const ActiveVisual = activeProd.VisualComponent;
 
   const scrollToContact = () => {
     const element = document.getElementById("contact");
@@ -117,230 +134,163 @@ export const Products: React.FC = () => {
   };
 
   return (
-    <section id="products" className="py-24 sm:py-32 bg-[#0a0a0a] text-[#fafafa] relative border-t border-white/10">
+    <section id="products" className="py-20 sm:py-32 bg-[#0a0a0a] text-[#fafafa] relative border-t border-white/10 select-none">
       {/* Background Atmosphere */}
       <div className="absolute inset-0 bg-arch-grid opacity-30 pointer-events-none" />
       <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-[#f97316]/5 rounded-full blur-[160px] pointer-events-none" />
 
-      <div className="relative max-w-[1536px] mx-auto px-6 sm:px-10 lg:px-16 z-10 w-full space-y-16">
+      <div className="relative max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-16 z-10 w-full space-y-12 sm:space-y-16">
         
         {/* Section Wayfinding Header */}
         <RevealOnScroll delay={0.1} direction="up">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-white/10 pb-10">
-            <div className="max-w-3xl space-y-4">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10 pb-8 sm:pb-10">
+            <div className="max-w-3xl space-y-3 sm:space-y-4">
               <Eyebrow index="003" label="PROPRIETARY PRODUCTS & ENGINEERING SERVICES" />
-              <h2 className="font-display text-4xl sm:text-6xl lg:text-6xl font-extrabold uppercase text-[#fafafa] tracking-tight leading-[0.95]">
-                PROPRIETARY PRODUCTS & <br />
-                <GradientText className="inline">AI ENGINEERING SERVICES</GradientText>
+              <h2 className="font-display text-2xl sm:text-5xl lg:text-6xl font-extrabold uppercase text-[#fafafa] tracking-tight leading-[0.95] break-words">
+                ENGINEERED FOR <br />
+                <GradientText className="inline">ENTERPRISE PERFORMANCE</GradientText>
               </h2>
-              <p className="font-sans text-[#a1a1a1] text-base sm:text-xl font-normal leading-relaxed max-w-2xl">
-                Grevya delivers production AI/ML platforms, domain-tuned accelerators, and bespoke software engineering built for enterprise reliability.
+              <p className="font-sans text-[#a1a1a1] text-sm sm:text-xl font-normal leading-relaxed max-w-2xl">
+                Explore our flagship AI product platforms and specialized software engineering capabilities.
               </p>
             </div>
-
-            {/* Category Filter Pills */}
-            <div className="flex flex-wrap items-center gap-2">
-              <Pill
-                asButton
-                variant={activeCategory === "all" ? "accent" : "outline"}
-                size="md"
-                onClick={() => setActiveCategory("all")}
-              >
-                All Systems
-              </Pill>
-              <Pill
-                asButton
-                variant={activeCategory === "flagship" ? "accent" : "outline"}
-                size="md"
-                onClick={() => setActiveCategory("flagship")}
-              >
-                Flagship Products
-              </Pill>
-              <Pill
-                asButton
-                variant={activeCategory === "services" ? "accent" : "outline"}
-                size="md"
-                onClick={() => setActiveCategory("services")}
-              >
-                Engineering Services
-              </Pill>
-            </div>
-          </div>
-        </RevealOnScroll>
-
-        {/* Section Part 1: Flagship Proprietary Products (2x2 Architectural Grid) */}
-        {(activeCategory === "all" || activeCategory === "flagship") && (
-          <div className="space-y-8">
-            <RevealOnScroll delay={0.1} direction="up">
-              <div className="flex items-center justify-between">
-                <div className="text-xs font-mono font-semibold uppercase tracking-[0.2em] text-[#f97316]">
-                  PART I • FLAGSHIP PROPRIETARY PLATFORMS
-                </div>
-                <div className="text-xs font-mono text-[#6b6b6b]">4 PRODUCTION PLATFORMS</div>
-              </div>
-            </RevealOnScroll>
-
-            <div className="grid md:grid-cols-2 gap-8">
-              {flagshipProducts.map((prod, idx) => (
-                <RevealOnScroll key={prod.id} delay={0.1 + idx * 0.08} direction="up">
-                  <ReusableCard
-                    variant="elevated"
-                    hoverable
-                    data-cursor="hover"
-                    className="p-8 border-white/10 space-y-6 relative overflow-hidden group flex flex-col justify-between h-full hover:border-[#f97316]/40 transition-all duration-300"
-                  >
-                    <GhostNumeral
-                      numeral={prod.numeral}
-                      className="absolute -right-4 -top-8 text-white/[0.04] group-hover:text-[#f97316]/[0.08] transition-colors"
-                    />
-
-                    <div className="space-y-4 relative z-10">
-                      <div className="flex items-center justify-between">
-                        <Pill variant="accent" size="sm">
-                          {prod.category}
-                        </Pill>
-                        <span className="font-mono text-xs font-bold text-[#f97316]">
-                          [{prod.numeral}]
-                        </span>
-                      </div>
-
-                      <div className="space-y-1.5">
-                        <h3 className="text-2xl sm:text-3xl font-display font-extrabold uppercase text-white tracking-wide group-hover:text-[#fb923c] transition-colors">
-                          {prod.name}
-                        </h3>
-                        <p className="text-xs font-mono text-[#a1a1a1]">
-                          {prod.tagline}
-                        </p>
-                      </div>
-
-                      <p className="font-sans text-[#a1a1a1] text-sm leading-relaxed">
-                        {prod.desc}
-                      </p>
-
-                      <div className="space-y-2 pt-2 border-t border-white/5">
-                        {prod.capabilities.map((cap, i) => (
-                          <div key={i} className="flex items-start gap-2 text-xs font-sans text-slate-300">
-                            <CheckCircle2 className="h-4 w-4 text-[#f97316] flex-shrink-0 mt-0.5" />
-                            <span>{cap}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="pt-6 relative z-10 border-t border-white/10 flex items-center justify-between">
-                      <Link
-                        to={prod.route}
-                        className="inline-flex items-center gap-2 text-xs font-sans font-bold uppercase tracking-[0.2em] text-white hover:text-[#f97316] transition-colors group/link"
-                      >
-                        <span>Explore Platform</span>
-                        <ArrowRight className="h-4 w-4 group-hover/link:translate-x-1 transition-transform" />
-                      </Link>
-
-                      <button
-                        onClick={scrollToContact}
-                        className="text-xs font-mono text-[#a1a1a1] hover:text-white transition-colors"
-                      >
-                        Request Demo →
-                      </button>
-                    </div>
-                  </ReusableCard>
-                </RevealOnScroll>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Section Part 2: AI Engineering Services */}
-        {(activeCategory === "all" || activeCategory === "services") && (
-          <div className="space-y-8 pt-8">
-            <RevealOnScroll delay={0.1} direction="up">
-              <div className="flex items-center justify-between border-t border-white/10 pt-10">
-                <div className="text-xs font-mono font-semibold uppercase tracking-[0.2em] text-[#f97316]">
-                  PART II • ENTERPRISE ENGINEERING SERVICES
-                </div>
-                <div className="text-xs font-mono text-[#6b6b6b]">4 SERVICE DOMAINS</div>
-              </div>
-            </RevealOnScroll>
-
-            <div className="grid md:grid-cols-2 gap-8">
-              {engineeringServices.map((serv, idx) => {
-                const Icon = serv.icon;
-                return (
-                  <RevealOnScroll key={serv.slug} delay={0.1 + idx * 0.08} direction="up">
-                    <ReusableCard
-                      variant="elevated"
-                      hoverable
-                      data-cursor="hover"
-                      className="p-8 border-white/10 space-y-6 relative overflow-hidden group flex flex-col justify-between h-full hover:border-[#f97316]/40 transition-all duration-300"
-                    >
-                      <GhostNumeral
-                        numeral={serv.numeral}
-                        className="absolute -right-4 -top-8 text-white/[0.04] group-hover:text-[#f97316]/[0.08] transition-colors"
-                      />
-
-                      <div className="space-y-4 relative z-10">
-                        <div className="flex items-center justify-between">
-                          <div className="p-2.5 rounded-xl bg-[#f97316]/10 border border-[#f97316]/20 text-[#f97316]">
-                            <Icon className="h-5 w-5" />
-                          </div>
-                          <span className="font-mono text-xs font-bold text-[#f97316]">
-                            [{serv.numeral}]
-                          </span>
-                        </div>
-
-                        <div className="space-y-1">
-                          <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#a1a1a1]">
-                            {serv.category}
-                          </span>
-                          <h3 className="text-2xl font-display font-extrabold uppercase text-white tracking-wide group-hover:text-[#fb923c] transition-colors">
-                            {serv.title}
-                          </h3>
-                        </div>
-
-                        <p className="font-sans text-[#a1a1a1] text-sm leading-relaxed">
-                          {serv.desc}
-                        </p>
-                      </div>
-
-                      <div className="pt-6 relative z-10 border-t border-white/10 flex items-center justify-between">
-                        <Link
-                          to={`/solutions/${serv.slug}`}
-                          className="inline-flex items-center gap-2 text-xs font-sans font-bold uppercase tracking-[0.2em] text-white hover:text-[#f97316] transition-colors group/link"
-                        >
-                          <span>View Service Details</span>
-                          <ArrowRight className="h-4 w-4 group-hover/link:translate-x-1 transition-transform" />
-                        </Link>
-                      </div>
-                    </ReusableCard>
-                  </RevealOnScroll>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* Section Footer Callout */}
-        <RevealOnScroll delay={0.3} direction="up">
-          <div className="p-8 rounded-[14px] bg-[#131313] border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div>
-              <div className="text-base font-display font-bold uppercase text-white">
-                Need a Custom AI Architecture or Feasibility Audit?
-              </div>
-              <div className="text-xs font-sans text-[#a1a1a1]">
-                Consult directly with Grevya software architects to evaluate stack feasibility and ROI.
-              </div>
-            </div>
-            <Pill
-              asButton
-              variant="accent"
-              size="lg"
+            
+            <button
               onClick={scrollToContact}
-              icon={<ArrowRight className="h-4 w-4" />}
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#f97316] hover:bg-[#ea580c] text-white font-sans font-bold text-xs uppercase tracking-[0.18em] transition-all duration-300 shadow-accent-glow self-start md:self-auto"
             >
-              Book Technical Review
-            </Pill>
+              <span>Schedule Product Demo</span>
+              <ArrowRight className="h-4 w-4" />
+            </button>
           </div>
         </RevealOnScroll>
+
+        {/* Flagship Product Showcase Workspace */}
+        <div className="space-y-6 sm:space-y-8">
+          
+          {/* Product Navigation Track */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3">
+            {flagshipProducts.map((prod, idx) => {
+              const isSelected = activeProdIdx === idx;
+              return (
+                <button
+                  key={prod.id}
+                  onClick={() => setActiveProdIdx(idx)}
+                  className={`p-3 sm:p-4 rounded-xl border text-left transition-all duration-300 focus:outline-none ${
+                    isSelected
+                      ? "bg-[#131313] border-[#f97316] shadow-md border-l-4"
+                      : "bg-[#131313]/40 border-white/10 text-slate-400 hover:border-white/20 hover:text-white"
+                  }`}
+                >
+                  <div className="text-[9px] sm:text-[10px] font-mono font-bold text-[#f97316] uppercase truncate mb-0.5">
+                    {prod.numeral} • {prod.category}
+                  </div>
+                  <div className={`text-xs sm:text-sm font-display font-bold uppercase truncate ${isSelected ? "text-white" : "text-slate-300"}`}>
+                    {prod.name}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Active Product Interactive Workspace Grid */}
+          <div className="grid lg:grid-cols-12 gap-8 items-center bg-[#131313]/90 backdrop-blur-2xl border border-white/12 rounded-2xl p-5 sm:p-10 shadow-2xl">
+            
+            {/* Left: Product Metadata & Capabilities */}
+            <div className="lg:col-span-6 space-y-5 sm:space-y-6">
+              <div className="space-y-2">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-mono text-[#f97316] font-bold uppercase">
+                  <Sparkles className="h-3 w-3 text-[#f97316]" />
+                  <span>{activeProd.category}</span>
+                </div>
+                <h3 className="font-display text-2xl sm:text-4xl font-extrabold uppercase text-white tracking-tight">
+                  {activeProd.name}
+                </h3>
+                <p className="font-sans text-xs sm:text-base text-[#f97316] font-semibold">
+                  "{activeProd.positioning}"
+                </p>
+              </div>
+
+              <p className="font-sans text-xs sm:text-sm text-[#a1a1a1] leading-relaxed">
+                {activeProd.desc}
+              </p>
+
+              {/* Capability Checklist */}
+              <div className="space-y-2 font-sans text-xs pt-2 border-t border-white/10">
+                <div className="text-[9px] sm:text-[10px] font-mono text-[#6b6b6b] uppercase tracking-wider">
+                  Core Technical Capabilities
+                </div>
+                {activeProd.capabilities.map((cap, i) => (
+                  <div key={i} className="flex items-center gap-2 text-slate-200">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 flex-shrink-0" />
+                    <span>{cap}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Explore Link */}
+              <div className="pt-3">
+                <Link
+                  to={activeProd.route}
+                  className="inline-flex items-center gap-2 text-xs font-mono font-bold text-[#f97316] uppercase tracking-wider hover:text-white transition-colors"
+                >
+                  <span>Explore Product Solution</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Right: Active Product Interactive Demonstration Preview */}
+            <div className="lg:col-span-6">
+              <ActiveVisual />
+            </div>
+
+          </div>
+        </div>
+
+        {/* Specialized Engineering Services Grid */}
+        <div className="space-y-8 pt-8 border-t border-white/10">
+          <div className="space-y-2">
+            <Eyebrow index="004" label="SPECIALIZED ENGINEERING SERVICES" />
+            <h3 className="font-display text-xl sm:text-3xl font-bold uppercase text-white">
+              Enterprise Services
+            </h3>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {engineeringServices.map((svc) => {
+              const Icon = svc.icon;
+              return (
+                <Link
+                  key={svc.slug}
+                  to={`/solutions/${svc.slug}`}
+                  className="p-5 rounded-xl bg-[#131313]/70 hover:bg-[#131313] border border-white/10 hover:border-[#f97316]/40 transition-all group flex flex-col justify-between space-y-4"
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between font-mono text-xs">
+                      <span className="text-[#f97316] font-bold">{svc.numeral}</span>
+                      <span className="text-[9px] text-[#6b6b6b] uppercase">{svc.category}</span>
+                    </div>
+                    <div className="p-2.5 rounded-lg bg-white/5 group-hover:bg-[#f97316]/10 text-white group-hover:text-[#f97316] w-fit transition-colors">
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <h4 className="font-display text-sm font-bold uppercase text-white group-hover:text-[#f97316] transition-colors">
+                      {svc.title}
+                    </h4>
+                    <p className="font-sans text-xs text-[#a1a1a1] leading-relaxed">
+                      {svc.desc}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 text-[10px] font-mono text-[#f97316] font-bold uppercase pt-2 border-t border-white/5">
+                    <span>EXPLORE SERVICE</span>
+                    <ArrowRight className="h-3 w-3" />
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
 
       </div>
     </section>

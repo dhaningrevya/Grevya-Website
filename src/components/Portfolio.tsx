@@ -115,7 +115,7 @@ export const Portfolio: React.FC = () => {
         <RevealOnScroll delay={0.1} direction="up">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-white/10 pb-10">
             <div className="max-w-3xl space-y-4">
-              <Eyebrow index="005" label="OUR ENGINEERING PROCESS & SOLUTION BLUEPRINTS" />
+              <Eyebrow index="008" label="OUR ENGINEERING PROCESS & SOLUTION BLUEPRINTS" />
               <h2 className="font-display text-4xl sm:text-6xl lg:text-6xl font-extrabold uppercase text-[#fafafa] tracking-tight leading-[0.95]">
                 ENGINEERING PROCESS & <br />
                 <GradientText className="inline">SOLUTION BLUEPRINTS</GradientText>

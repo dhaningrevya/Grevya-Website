@@ -94,7 +94,7 @@ export const Industries: React.FC = () => {
         <RevealOnScroll delay={0.1} direction="up">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-white/10 pb-10">
             <div className="max-w-3xl space-y-4">
-              <Eyebrow index="004" label="VERTICAL DOMAIN MATRIX & INDUSTRY SOLUTIONS" />
+              <Eyebrow index="007" label="VERTICAL DOMAIN MATRIX & INDUSTRY SOLUTIONS" />
               <h2 className="font-display text-4xl sm:text-6xl lg:text-6xl font-extrabold uppercase text-[#fafafa] tracking-tight leading-[0.95]">
                 INDUSTRIES WE <GradientText className="inline">TRANSFORM</GradientText>
               </h2>
